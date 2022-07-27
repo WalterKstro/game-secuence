@@ -4,13 +4,20 @@
         <i class="result__icon text-success bi bi-check-circle-fill"></i>
         <h4 class="text-uppercase text-muted fw-bolder mt-3">Desempeño</h4>
     </div>
-    <p class="percentage__result fw-bolder">100%</p>
+    <p class="percentage__result fw-bolder">{{ scorePercentage }}</p>
     <button class="btn btn-danger btn__result text-uppercase py-3 px-5 fw-bolder rounded-pill border-0">Continuar</button>
     </div>
 </template>
 
 <script setup>
+import { computed,inject } from 'vue';
+const score = inject('score');
+
+const scorePercentage = computed(() => {
+    return `${score.value}%`
+}) 
 </script>
+
 <style scoped>
 .result__component{
     margin: auto;

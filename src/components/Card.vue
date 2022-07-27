@@ -6,31 +6,36 @@
 
 <script setup>
 import { defineAsyncComponent, shallowRef,ref,provide,computed } from "vue";
+import useCheckAnswer from '../composables /useCheckAnswer'
 
 const secuenceOne = defineAsyncComponent( () => import('./SecuenceOne.vue') )
 const secuenceTwo = defineAsyncComponent( () => import('./SecuenceTwo.vue') )
 const secuenceThree = defineAsyncComponent( () => import('./SecuenceThree.vue') )
+const secuenceFour = defineAsyncComponent( () => import('./SecuenceFour.vue') )
+const secuenceFive = defineAsyncComponent( () => import('./SecuenceFive.vue') )
 const result = defineAsyncComponent(() => import('./Result.vue'))
 
-const listComponents = [secuenceOne, secuenceTwo, secuenceThree, result]
+const {processScore} = useCheckAnswer()
+const listComponents = [secuenceOne,secuenceTwo,secuenceThree,secuenceFour,secuenceFive,result]
 const currentComponent = shallowRef( secuenceOne )
 const indexCounter = ref(0)
 const chooisedAnswerAndTruthyAnswer = ref({})
+const totalRightAnwers = ref(0)
 const score = ref(0)
 const resultAnswer = ref(null)
 
 /* Provide / Inject  */
-const udpateScore = n => {
-    score.value += n
-}
 const updateChooisedAnswerAndTruthyAnswer = objectAnwers => {
     chooisedAnswerAndTruthyAnswer.value = objectAnwers
 }
 const updateResultAnswer = (value = null) => {
     resultAnswer.value = value
+    if( value ) {
+        totalRightAnwers.value += 1
+    }
 }
 
-provide( 'score', {score,udpateScore} )
+provide( 'score', score )
 provide('objectAnwers', { chooisedAnswerAndTruthyAnswer,updateChooisedAnswerAndTruthyAnswer })
 provide('resultAnswer', {resultAnswer,updateResultAnswer})
 
@@ -39,6 +44,7 @@ const switcherComponents = () => {
     currentComponent.value = listComponents[indexCounter.value]
 
     if ( indexCounter.value == (listComponents.length - 1) )  {
+        score.value = processScore( totalRightAnwers.value, listComponents.length - 1 )
         clearInterval(intervals)
     }
 }
