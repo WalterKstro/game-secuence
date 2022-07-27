@@ -1,17 +1,15 @@
 <template>
     
     <div class="position-relative">
-        <div class="option__number fw-bolder text-center position-relative" :class="{ 'border__number--dotted' : isNullProp }" ref="refBoxNumber">
+        <div class="option__number fw-bolder text-center position-relative" 
+            :class="{ 'border__number--dotted' : isNullProp }" 
+            ref="refBoxNumber">
             {{ number }}
-            <div class="rounded p-1 justify-content-between posible__answers position-absolute" v-show="isNullProp">
-                <button 
-                    type="button" 
-                    class="posible__answers--answer fw-bolder border-0 rounded-1 p-1" 
-                    v-for="answer in listAnswer" :key="answer"
-                    @click="chooseNumber(answer)">
-                    {{ answer }}
-                </button>
-            </div>
+
+            <options 
+                @display-number="displayNumberSelected"
+                :isNullProp="isNullProp"/>
+        
         </div>
         <template v-if="resultAnswer != null">
             <icon v-if="isNullProp && resultAnswer"></icon>
@@ -27,21 +25,21 @@
 <script setup>
 import { computed,ref,inject, defineAsyncComponent,onMounted } from 'vue';
 
-const { number, listAnswer } = defineProps(['number','listAnswer'])
-const Icon = defineAsyncComponent(() => import('./Icon.vue'))
-const emit = defineEmits(['sendAnswer'])
-const refBoxNumber = ref(null)
+const options = defineAsyncComponent( () => import('./ListOptions.vue') )
+const icon = defineAsyncComponent(() => import('./Icon.vue'))
+
+const { number } = defineProps(['number'])
 const {resultAnswer,updateResultAnswer} = inject('resultAnswer')
+const {updateChooisedAnswerAndTruthyAnswer} = inject('objectAnwers')
+const refBoxNumber = ref(null)
 
 const isNullProp = computed( () => {
     return number == null ? true : false
 })
-
-const chooseNumber = answer => {
+const displayNumberSelected = answer => {
     refBoxNumber.value.textContent = answer
-    emit('sendAnswer',answer)
+    updateChooisedAnswerAndTruthyAnswer({chooised:answer})
 }
-
 onMounted(() => {
     updateResultAnswer()
 })
@@ -56,21 +54,9 @@ onMounted(() => {
     color: var(--dark);
 }
 
-.posible__answers{ 
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 1rem;
-    display: flex;
-    width: 7.5rem;
-    background-color: var(--gray);
-    line-height: normal;
-}
 .border__number--dotted {
     border:2px dashed #A4A4A4;
     border-radius: 1rem;
 }
-.posible__answers--answer{
-    color: var(--dark);
-}
+
 </style>

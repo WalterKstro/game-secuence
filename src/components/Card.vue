@@ -23,10 +23,11 @@ const chooisedAnswerAndTruthyAnswer = ref({})
 const totalRightAnwers = ref(0)
 const score = ref(0)
 const resultAnswer = ref(null)
+const listProbablyAnswers = ref([])
 
 /* Provide / Inject  */
-const updateChooisedAnswerAndTruthyAnswer = objectAnwers => {
-    chooisedAnswerAndTruthyAnswer.value = objectAnwers
+const updateChooisedAnswerAndTruthyAnswer = truthyOrChooised => {
+    chooisedAnswerAndTruthyAnswer.value = {...chooisedAnswerAndTruthyAnswer.value, ...truthyOrChooised}
 }
 const updateResultAnswer = (value = null) => {
     resultAnswer.value = value
@@ -34,7 +35,11 @@ const updateResultAnswer = (value = null) => {
         totalRightAnwers.value += 1
     }
 }
+const updateListProbablyAnswers = list => {
+    listProbablyAnswers.value = list
+}
 
+provide('listProbablyAnswers',{listProbablyAnswers,updateListProbablyAnswers})
 provide( 'score', score )
 provide('objectAnwers', { chooisedAnswerAndTruthyAnswer,updateChooisedAnswerAndTruthyAnswer })
 provide('resultAnswer', {resultAnswer,updateResultAnswer})

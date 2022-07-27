@@ -20,7 +20,8 @@ const useSecuence =  () => {
         return list.slice( startIndex, endIndex )
     }
 
-    const hideRandomNumber = () => {
+    
+    const objectWithSecuenceUncompletedAndTrutyAnswer = () => {
         const indexRandom = randomIndex();
         const list = listSecuenceNumbers();
         const listWithNumberHidden = list.map( (number, index) => {
@@ -43,7 +44,7 @@ const useSecuence =  () => {
     }
 
     return {
-        hideRandomNumber,
+        objectWithSecuenceUncompletedAndTrutyAnswer,
         getListWithTheProbablityAnswer
     }
 }

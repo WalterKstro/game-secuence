@@ -3,11 +3,10 @@
         <h1 class="fs-2 text-center m-0">Completa la secuencia</h1>
         <div class="secuence__numbers d-flex flex-column justify-content-between align-items-center flex-lg-row">
             <number 
-            v-for="(number, index) in listSecuenceOfNumbers" 
-            :key="index" 
-            :number="number" 
-            :listAnswer="listProbablyAnswers"
-            @send-answer="sendChooisedAnswerAndTruthyAnswer"/>
+                v-for="(number, index) in listSecuenceOfNumbers" 
+                :key="index" 
+                :number="number"
+            />
         </div>
         <button class="btn__answer" @click="checkAnswer">Responder</button>
     </div>
@@ -18,30 +17,27 @@ import { defineAsyncComponent, onMounted,ref,inject } from 'vue';
 import useSecuence from '../composables /useSecuence.js'
 import useCheckAnswer from '../composables /useCheckAnswer';
 
-const Number = defineAsyncComponent( () => import('./Number.vue') )
-const listSecuenceOfNumbers = ref({})
-const listProbablyAnswers = ref([])
-const { hideRandomNumber,getListWithTheProbablityAnswer } = useSecuence()
+const number = defineAsyncComponent( () => import('./Number.vue') )
+const { objectWithSecuenceUncompletedAndTrutyAnswer,getListWithTheProbablityAnswer } = useSecuence()
 const {checkingTheAnswers} = useCheckAnswer();
-const answerTruthy = ref(0)
+const listSecuenceOfNumbers = ref([])
 
+/*Inject*/
 const {chooisedAnswerAndTruthyAnswer, updateChooisedAnswerAndTruthyAnswer} = inject('objectAnwers')
 const {updateResultAnswer} = inject('resultAnswer')
-
-const sendChooisedAnswerAndTruthyAnswer = chooisedAnswer => {
-    updateChooisedAnswerAndTruthyAnswer({ chooisedAnswer,truthyAnswer:answerTruthy.value })
-}
+const {updateListProbablyAnswers} = inject('listProbablyAnswers')
 
 const checkAnswer = () => {
-    const { chooisedAnswer,truthyAnswer } = chooisedAnswerAndTruthyAnswer.value;
-    updateResultAnswer( checkingTheAnswers( truthyAnswer, chooisedAnswer) )
+    const { chooised,truthy } = chooisedAnswerAndTruthyAnswer.value;
+    updateResultAnswer( checkingTheAnswers( truthy, chooised) )
 }
 
 
 onMounted(() => {
-    const {truthy,list} = hideRandomNumber()
+    const {truthy,list} = objectWithSecuenceUncompletedAndTrutyAnswer()
     listSecuenceOfNumbers.value = list;
-    answerTruthy.value = truthy;
-    listProbablyAnswers.value = getListWithTheProbablityAnswer(truthy)
+    
+    updateChooisedAnswerAndTruthyAnswer({truthy})
+    updateListProbablyAnswers( getListWithTheProbablityAnswer(truthy) )
 })
 </script>
