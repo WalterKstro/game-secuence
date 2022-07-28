@@ -1,6 +1,6 @@
 <script setup>
 import { defineAsyncComponent } from 'vue';
-const Card = defineAsyncComponent(() => import('./components/Card.vue'))
+const card = defineAsyncComponent(() => import('./components/Card.vue'))
 </script>
 
 <template>

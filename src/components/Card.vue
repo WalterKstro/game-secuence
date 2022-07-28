@@ -5,8 +5,8 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, shallowRef,ref,provide,computed } from "vue";
-import useCheckAnswer from '../composables /useCheckAnswer'
+import { defineAsyncComponent, shallowRef,ref,provide } from "vue";
+import useCheckAnswer from '../composables/useCheckAnswer';
 
 const secuenceOne = defineAsyncComponent( () => import('./SecuenceOne.vue') )
 const secuenceTwo = defineAsyncComponent( () => import('./SecuenceTwo.vue') )
@@ -24,6 +24,7 @@ const totalRightAnwers = ref(0)
 const score = ref(0)
 const resultAnswer = ref(null)
 const listProbablyAnswers = ref([])
+const timerSecond = ref(0)
 
 /* Provide / Inject  */
 const updateChooisedAnswerAndTruthyAnswer = truthyOrChooised => {
@@ -43,8 +44,9 @@ provide('listProbablyAnswers',{listProbablyAnswers,updateListProbablyAnswers})
 provide( 'score', score )
 provide('objectAnwers', { chooisedAnswerAndTruthyAnswer,updateChooisedAnswerAndTruthyAnswer })
 provide('resultAnswer', {resultAnswer,updateResultAnswer})
+provide('timer', timerSecond)
 
-const switcherComponents = () => {
+const switcherComponents = async () => {
     indexCounter.value +=1;
     currentComponent.value = listComponents[indexCounter.value]
 
@@ -54,5 +56,4 @@ const switcherComponents = () => {
     }
 }
 const intervals = setInterval(switcherComponents,10000)
-
 </script>

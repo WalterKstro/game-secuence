@@ -40,12 +40,14 @@ const displayNumberSelected = answer => {
     refBoxNumber.value.textContent = answer
     updateChooisedAnswerAndTruthyAnswer({chooised:answer})
 }
+
 onMounted(() => {
     updateResultAnswer()
+    console.log('mounted component number')
 })
 </script>
 
-<style lang="css" scoped>
+<style scoped>
 .option__number{
     width: 5.5rem;
     height: 5.5rem;

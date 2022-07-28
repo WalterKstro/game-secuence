@@ -2,7 +2,7 @@
     <div class="grid__component card__secuence p-4 rounded-3">
         <h1 class="fs-2 text-center m-0">Completa la secuencia</h1>
         <div class="secuence__numbers d-flex flex-column justify-content-between align-items-center flex-lg-row">
-            <number 
+            <random-number
                 v-for="(number, index) in listSecuenceOfNumbers" 
                 :key="index" 
                 :number="number"
@@ -14,10 +14,10 @@
 
 <script setup>
 import { defineAsyncComponent, onMounted,ref,inject } from 'vue';
-import useSecuence from '../composables /useSecuence.js'
-import useCheckAnswer from '../composables /useCheckAnswer';
+import useSecuence from '../composables/useSecuence.js';
+import useCheckAnswer from '../composables/useCheckAnswer';
 
-const number = defineAsyncComponent( () => import('./Number.vue') )
+const randomNumber = defineAsyncComponent( () => import('./Number.vue') )
 const { objectWithSecuenceUncompletedAndTrutyAnswer,getListWithTheProbablityAnswer } = useSecuence()
 const {checkingTheAnswers} = useCheckAnswer();
 const listSecuenceOfNumbers = ref([])
@@ -36,7 +36,6 @@ const checkAnswer = () => {
 onMounted(() => {
     const {truthy,list} = objectWithSecuenceUncompletedAndTrutyAnswer()
     listSecuenceOfNumbers.value = list;
-    
     updateChooisedAnswerAndTruthyAnswer({truthy})
     updateListProbablyAnswers( getListWithTheProbablityAnswer(truthy) )
 })
